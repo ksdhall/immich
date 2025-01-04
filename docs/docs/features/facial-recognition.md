@@ -6,15 +6,15 @@ Immich recognizes faces in your photos and videos and groups them together into 
 
 The list of people is shown in the Explore page.
 
-<img src={require('./img/facial-recognition-1.png').default} title='Facial Recognition 1' />
+<img src={require('./img/facial-recognition-1.webp').default} title='Facial Recognition 1' />
 
 Upon clicking on a person, a list of assets that contain their face will be shown.
 
-<img src={require('./img/facial-recognition-2.png').default} title='Facial Recognition 2' />
+<img src={require('./img/facial-recognition-2.webp').default} title='Facial Recognition 2' />
 
 The asset detail view will also show the faces that are recognized in the asset.
 
-<img src={require('./img/facial-recognition-3.png').default} title='Facial Recognition 3' />
+<img src={require('./img/facial-recognition-3.webp').default} title='Facial Recognition 3' />
 
 ## Actions
 
@@ -28,7 +28,7 @@ Additional actions you can do include:
 
 It can be found from the app bar when you access the detail view of a person.
 
-<img src={require('./img/facial-recognition-4.png').default} title='Facial Recognition 4' width="70%"/>
+<img src={require('./img/facial-recognition-4.webp').default} title='Facial Recognition 4' width="70%"/>
 
 ## How Face Detection Works
 
@@ -36,7 +36,7 @@ Face detection sends the generated preview image to the machine learning service
 
 ## How Facial Recognition Works
 
-The facial recognition algorithm we use is derived from DBSCAN, a popular clustering algorithm. It essentially treats each detected face as a point in a graph and aims to group points that are close to each other.
+The facial recognition algorithm we use is derived from [DBSCAN](https://www.youtube.com/watch?v=RDZUdRSDOok), a popular clustering algorithm. It essentially treats each detected face as a point in a graph and aims to group points that are close to each other.
 
 :::note
 An important concept is whether something is a _core point_. A core point has a minimum number of points around it within a certain distance. A non-core point can only be assigned to a cluster if it can reach a core point; a non-core point can't be used to extend a cluster even if it's part of one. In Immich, the _Minimum Recognized Faces_ setting controls the threshold to be considered a core point.
@@ -77,7 +77,7 @@ There are a few different models available; the default is typically considered 
 
 ### Minimum detection score
 
-This setting affects whether a result from the face detecton model is filtered out as a false positive. It may seem tempting to set this low to detect more faces, but it can lead to false positives that are difficult to deal with and can harm facial recognition. It is strongly recommended not to go below 0.5 for this setting. Setting it to a very high number like 0.9 is also not recommended: the default is already biased toward precision, so a threshold that high leads to many undetected faces.
+This setting affects whether a result from the face detection model is filtered out as a false positive. It may seem tempting to set this low to detect more faces, but it can lead to false positives that are difficult to deal with and can harm facial recognition. It is strongly recommended not to go below 0.5 for this setting. Setting it to a very high number like 0.9 is also not recommended: the default is already biased toward precision, so a threshold that high leads to many undetected faces.
 
 After changing this setting, it will only apply to new face detection jobs. To apply the new setting to all assets, you need to re-run face detection for all assets.
 

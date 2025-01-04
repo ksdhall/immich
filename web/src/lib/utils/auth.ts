@@ -1,7 +1,9 @@
 import { browser } from '$app/environment';
-import { licenseStore } from '$lib/stores/license.store';
-import { serverInfo } from '$lib/stores/server-info.store';
-import { preferences as preferences$, user as user$ } from '$lib/stores/user.store';
+import { goto } from '$app/navigation';
+import { foldersStore } from '$lib/stores/folders.svelte';
+import { purchaseStore } from '$lib/stores/purchase.store';
+import { preferences as preferences$, resetSavedUser, user as user$ } from '$lib/stores/user.store';
+import { resetUserInteraction, userInteraction } from '$lib/stores/user.svelte';
 import { getAboutInfo, getMyPreferences, getMyUser, getStorage } from '@immich/sdk';
 import { redirect } from '@sveltejs/kit';
 import { DateTime } from 'luxon';
@@ -26,7 +28,7 @@ export const loadUser = async () => {
 
       // Check for license status
       if (serverInfo.licensed || user.license?.activatedAt) {
-        licenseStore.setLicenseStatus(true);
+        purchaseStore.setPurchaseStatus(true);
       }
     }
     return user;
@@ -70,7 +72,7 @@ export const authenticate = async (options?: AuthOptions) => {
 export const requestServerInfo = async () => {
   if (get(user$)) {
     const data = await getStorage();
-    serverInfo.set(data);
+    userInteraction.serverInfo = data;
   }
 };
 
@@ -86,4 +88,18 @@ export const getAccountAge = (): number => {
   const accountAge = now.diff(createdDate, 'days').days.toFixed(0);
 
   return Number(accountAge);
+};
+
+export const handleLogout = async (redirectUri: string) => {
+  try {
+    if (redirectUri.startsWith('/')) {
+      await goto(redirectUri);
+    } else {
+      globalThis.location.href = redirectUri;
+    }
+  } finally {
+    resetSavedUser();
+    resetUserInteraction();
+    foldersStore.clearCache();
+  }
 };
